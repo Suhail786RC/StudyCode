@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#1e1e1e">
+  <meta name="description" content="An offline learning workspace for ISST7322 and ERPL7312. Explore concepts, experiment with models and practise retrieval.">
+  <title>StudyCode — ISST7322 & ERPL7312</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to lesson</a>
+
+  <svg class="icon-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-files" viewBox="0 0 24 24">
+      <path d="M8 3h9l4 4v14H8zM17 3v5h4M4 17H2V2h11"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="10" cy="10" r="6.5"/>
+      <path d="m15 15 6 6"/>
+    </symbol>
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M12 5C8 2 4 3 2 4v15c3-2 7-2 10 0 3-2 7-2 10 0V4c-3-2-7-2-10 1Zm0 0v14"/>
+    </symbol>
+    <symbol id="i-lab" viewBox="0 0 24 24">
+      <path d="M8 2h8M10 2v7l-7 11c-.5 1 .2 2 1.5 2h15c1.3 0 2-1 1.5-2L14 9V2M7 15h10"/>
+    </symbol>
+    <symbol id="i-cards" viewBox="0 0 24 24">
+      <rect x="6" y="6" width="15" height="15" rx="2"/>
+      <path d="M17 3H5a2 2 0 0 0-2 2v12m8-4h5m-5 4h3"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="m5 12 4 4L20 5M20 12v8H3V3h10"/>
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </symbol>
+    <symbol id="i-code" viewBox="0 0 24 24">
+      <path d="m8 5-7 7 7 7m8-14 7 7-7 7M14 2l-4 20"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18"/>
+    </symbol>
+  </svg>
+
+  <div class="app-shell" id="appShell">
+    <header class="titlebar">
+      <button
+        class="icon-button mobile-menu"
+        id="menuButton"
+        aria-label="Open explorer"
+        aria-expanded="false"
+        aria-controls="sidebar"
+      >
+        <svg><use href="#i-menu"/></svg>
+      </button>
+
+      <span class="app-brand">
+        <svg><use href="#i-code"/></svg>
+        StudyCode
+      </span>
+
+      <button class="command-trigger" id="commandButton">
+        <svg><use href="#i-search"/></svg>
+        <span>Search lessons and tools</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+
+      <span class="window-label">Academic workspace</span>
+    </header>
+
+    <nav class="activitybar" aria-label="Workspace tools">
+      <button
+        class="activity active"
+        data-activity="explorer"
+        aria-label="Toggle explorer"
+        title="Explorer"
+      >
+        <svg><use href="#i-files"/></svg>
+      </button>
+
+      <button
+        class="activity"
+        data-activity="search"
+        aria-label="Search workspace"
+        title="Search · Ctrl K"
+      >
+        <svg><use href="#i-search"/></svg>
+      </button>
+
+      <button
+        class="activity"
+        data-activity="lessons"
+        aria-label="Open lesson library"
+        title="Lessons"
+      >
+        <svg><use href="#i-book"/></svg>
+      </button>
+
+      <button
+        class="activity"
+        data-activity="labs"
+        aria-label="Open interactive lab"
+        title="Interactive labs"
+      >
+        <svg><use href="#i-lab"/></svg>
+      </button>
+
+      <button
+        class="activity"
+        data-activity="cards"
+        aria-label="Open flashcards"
+        title="Flashcards"
+      >
+        <svg><use href="#i-cards"/></svg>
+      </button>
+
+      <button
+        class="activity"
+        data-activity="quiz"
+        aria-label="Open assessment"
+        title="Assessment"
+      >
+        <svg><use href="#i-check"/></svg>
+      </button>
+
+      <span class="activity-bottom" title="Your personal study workspace">
+        SC
+      </span>
+    </nav>
+
+    <aside class="sidebar" id="sidebar" aria-label="Explorer">
+      <div class="sidebar-heading">
+        <span>EXPLORER</span>
+        <button
+          class="icon-button"
+          id="closeSidebar"
+          aria-label="Close explorer"
+        >
+          <svg><use href="#i-close"/></svg>
+        </button>
+      </div>
+
+      <div class="module-switch" role="group" aria-label="Choose module">
+        <button data-module="isst" aria-pressed="true">
+          ISST<span>7322</span>
+        </button>
+        <button data-module="erp" aria-pressed="false">
+          ERPL<span>7312</span>
+        </button>
+      </div>
+
+      <p class="sidebar-module" id="sidebarModule">
+        Information Systems Strategy
+      </p>
+
+      <div class="folder-label">⌄ &nbsp; STUDY WORKSPACE</div>
+
+      <nav
+        id="fileTree"
+        class="file-tree"
+        aria-label="Module files"
+      ></nav>
+
+      <div class="sidebar-progress">
+        <div>
+          <span>READING PROGRESS</span>
+          <strong id="readingCount">0 / 10</strong>
+        </div>
+        <progress
+          id="readingProgress"
+          value="0"
+          max="10"
+          aria-label="Lessons marked read"
+        ></progress>
+        <p>Explore. Recall. Apply.</p>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="green-dot"></span>
+        <span id="storageStatus">Local progress enabled</span>
+      </div>
+    </aside>
+
+    <div class="editor">
+      <nav class="tabs" id="tabs" aria-label="Open files"></nav>
+
+      <div class="breadcrumbs" id="breadcrumbs">
+        workspace / ISST7322 / overview.md
+      </div>
+
+      <main
+        id="main"
+        tabindex="-1"
+        aria-label="Learning content"
+      ></main>
+    </div>
+
+    <footer class="statusbar">
+      <span>⎇ &nbsp; learning/main</span>
+      <span id="statusModule">ISST7322</span>
+      <span id="statusView">Overview</span>
+
+      <span class="status-right">
+        UTF-8
+        <span>Vanilla JavaScript</span>
+        <span>✓ Offline ready</span>
+      </span>
+    </footer>
+  </div>
+
+  <button
+    class="drawer-backdrop"
+    id="drawerBackdrop"
+    aria-label="Close explorer"
+    hidden
+  ></button>
+
+  <dialog id="commandDialog" aria-labelledby="commandTitle">
+    <div class="dialog-head">
+      <h2 id="commandTitle">Go to anything</h2>
+      <button
+        class="icon-button"
+        id="closeCommand"
+        aria-label="Close search"
+      >
+        <svg><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <label class="sr-only" for="commandInput">
+      Search both modules
+    </label>
+
+    <input
+      id="commandInput"
+      type="search"
+      autocomplete="off"
+      placeholder="Search concepts, lessons or tools…"
+    >
+
+    <div class="command-results" id="commandResults"></div>
+
+    <p class="dialog-hint">
+      Search both modules · Tab to a result · Enter to open · Esc to close
+    </p>
+  </dialog>
+
+  <div
+    class="sr-only"
+    id="announcer"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <noscript>
+    <div class="noscript">
+      Enable JavaScript to use the lesson library, models and calculators.
+    </div>
+  </noscript>
+</body>
+</html>
